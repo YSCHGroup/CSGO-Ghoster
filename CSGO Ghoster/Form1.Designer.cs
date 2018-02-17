@@ -40,7 +40,9 @@
             this.MapImage = new System.Windows.Forms.PictureBox();
             this.GhosterWindowInformationLabel = new System.Windows.Forms.Label();
             this.DebugBox = new System.Windows.Forms.RichTextBox();
+            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.MapImage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             this.SuspendLayout();
             // 
             // ipTextBox
@@ -139,6 +141,7 @@
             this.GhosterWindowInformationLabel.TabIndex = 9;
             this.GhosterWindowInformationLabel.Text = "Map Size: \r\nTop: \r\nLeft: ";
             this.GhosterWindowInformationLabel.Visible = false;
+            this.GhosterWindowInformationLabel.Click += new System.EventHandler(this.GhosterWindowInformationLabel_Click);
             this.GhosterWindowInformationLabel.MouseHover += new System.EventHandler(this.GhosterWindowInformationLabel_MouseHover);
             // 
             // DebugBox
@@ -176,12 +179,14 @@
             this.TopMost = true;
             this.Activated += new System.EventHandler(this.Form1_Activated);
             this.Deactivate += new System.EventHandler(this.Form1_Deactivate);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResizeEnd += new System.EventHandler(this.Form1_ResizeEnd);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseUp);
             this.Move += new System.EventHandler(this.Form1_Move);
             this.Resize += new System.EventHandler(this.Form1_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.MapImage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -189,16 +194,17 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox ipTextBox;
+        public System.Windows.Forms.TextBox ipTextBox;
         public System.Windows.Forms.Button startGhostingButton;
         public System.Windows.Forms.Button startGhostLocalButton;
         public System.Windows.Forms.PictureBox MapImage;
         public System.Windows.Forms.Label statusLabel;
-        private System.Windows.Forms.ToolTip toolTipsGhoster;
-        private System.Windows.Forms.Button replaceMapButton;
-        private System.Windows.Forms.Button settingsButton;
-        private System.Windows.Forms.Label GhosterWindowInformationLabel;
+        public System.Windows.Forms.ToolTip toolTipsGhoster;
+        public System.Windows.Forms.Button replaceMapButton;
+        public System.Windows.Forms.Button settingsButton;
+        public System.Windows.Forms.Label GhosterWindowInformationLabel;
         public System.Windows.Forms.RichTextBox DebugBox;
+        public System.Windows.Forms.BindingSource bindingSource1;
     }
 }
 

@@ -19,6 +19,7 @@ using Newtonsoft.Json;
 using ImageMagick;
 
 using System.Runtime.InteropServices;
+using System.Threading;
 
 
 namespace CSGO_Ghoster
@@ -28,64 +29,26 @@ namespace CSGO_Ghoster
         public Form1()
         {
             InitializeComponent();
-        }
-
-
-
-        public static class Ghoster
-        {
-            public static bool showDebugger { get; set; }
-            public static bool showStatus { get; set; }
-
-            public static string version { get; } = "1.0";
-            public static string csgoPath { get; set; }
-            public static string cfg_Path { get; set; }
-            public static string data_Path { get; } = @"C:\Users\" + Environment.UserName + @"\Documents\csgo\Ghoster " + Ghoster.version + @"\Data";
-            public static string csgoPath_Path { get; } = @"C:\Users\" + Environment.UserName + @"\Documents\csgo\Ghoster " + Ghoster.version + @"\Data\csgoPath.txt";
-            public static string settings_Path { get; } = @"C:\Users\" + Environment.UserName + @"\Documents\csgo\Ghoster " + Ghoster.version + @"\Data\settings.txt";
-            public static string maps_Path { get; } = @"C:\Users\" + Environment.UserName + @"\Documents\csgo\Ghoster " + Ghoster.version + @"\Maps";
-
-            public static WebClient webClient = new WebClient();
-            public static string publicIp { get; set; } = webClient.DownloadString("https://api.ipify.org");
-            public static string standardPort { get; set; } = "8910";
-            public static string publicPort { get; set; } = Ghoster.standardPort;
-
-            public static string publicHttpUri { get; set; } = "http://" + Form1.Ghoster.publicIp + @":" + Form1.Ghoster.publicPort;
-            public static string externalHttpUri { get; set; } = "http://" + Form1.Ghoster.publicIp + @":" + Form1.Ghoster.publicPort;
-
-            public static string GhostingType { get; set; }
-            public static string externalGhostIp { get; set; }
-
-            public static string match_map { get; set; }
-            public static int map_top { get; set; }
-            public static int map_left { get; set; }
-            public static int map_size { get; set; }
-
-            public static bool map_prefer_spectate_radar { get; set; }
-
-            public static bool player_names { get; set; }
-            public static bool player_weapons { get; set; }
-            public static bool player_hp { get; set; }
-            public static bool player_height { get; set; }
+            CheckForIllegalCrossThreadCalls = false;
         }
 
         void SetupFileSystem()
         {
-            if (!System.IO.Directory.Exists(Ghoster.maps_Path)) {
-                System.IO.Directory.CreateDirectory(Ghoster.maps_Path);
-                DebugBox.Text = DebugBox.Text + "\nCreated: " + Ghoster.maps_Path;
+            if (!System.IO.Directory.Exists(GhosterSettings.maps_Path)) {
+                System.IO.Directory.CreateDirectory(GhosterSettings.maps_Path);
+                DebugBox.Text = DebugBox.Text + "\nCreated: " + GhosterSettings.maps_Path;
             }
-            if (!System.IO.Directory.Exists(Ghoster.data_Path)) {
-                System.IO.Directory.CreateDirectory(Ghoster.data_Path);
-                DebugBox.Text = DebugBox.Text + "\nCreated: " + Ghoster.data_Path;
+            if (!System.IO.Directory.Exists(GhosterSettings.data_Path)) {
+                System.IO.Directory.CreateDirectory(GhosterSettings.data_Path);
+                DebugBox.Text = DebugBox.Text + "\nCreated: " + GhosterSettings.data_Path;
             }
         }
 
         public void GetLocalMaps()
         {
-            string mapPath = Ghoster.csgoPath + @"\csgo\resource\overviews";
+            string mapPath = GhosterSettings.csgoPath + @"\csgo\resource\overviews";
 
-            if (Directory.GetFiles(Ghoster.maps_Path, "*.png").Count() != Directory.GetFiles(mapPath, "*.dds").Count())
+            if (Directory.GetFiles(GhosterSettings.maps_Path, "*.png").Count() != Directory.GetFiles(mapPath, "*.dds").Count())
             {
                 DialogResult updateMaps = MessageBox.Show("CS:GO Ghoster found new maps in your csgo folder! Do you want to update Ghoster's map library?", "New map available!", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (updateMaps == DialogResult.Yes)
@@ -97,11 +60,11 @@ namespace CSGO_Ghoster
                     foreach (string map in maps)
                     {
                         string map_name = (map.Trim('"').Split('\\')[map.Contains("\\").ToString().Count() + 5]).Split('.')[0];
-                        if (!File.Exists(Ghoster.maps_Path + "\\" + map_name + ".png"))
+                        if (!File.Exists(GhosterSettings.maps_Path + "\\" + map_name + ".png"))
                         {
                             DebugBox.Text = DebugBox.Text + "\n" + map_name;
                             MagickImage mapImage = new MagickImage(map);
-                            mapImage.Write(Ghoster.maps_Path + "\\" + map_name + ".png");
+                            mapImage.Write(GhosterSettings.maps_Path + "\\" + map_name + ".png");
 
                             mapCounter += 1;
                         }
@@ -112,11 +75,11 @@ namespace CSGO_Ghoster
         
         void GetCsgoPath()
         {
-            if (File.Exists(Ghoster.csgoPath_Path) == true)
+            if (File.Exists(GhosterSettings.csgoPath_Path) == true)
             {
                 /// Load the saved path
-                Ghoster.csgoPath = File.ReadAllText(Ghoster.csgoPath_Path);
-                DebugBox.Text = DebugBox.Text + "\nFound prev. saved csgo path: \"" + Ghoster.csgoPath + "\"";
+                GhosterSettings.csgoPath = File.ReadAllText(GhosterSettings.csgoPath_Path);
+                DebugBox.Text = DebugBox.Text + "\nFound prev. saved csgo path: \"" + GhosterSettings.csgoPath + "\"";
             }
             else
             {
@@ -127,26 +90,26 @@ namespace CSGO_Ghoster
                     DebugBox.Text = DebugBox.Text + "\nSearching for csgo path in: " + d.Name;
                     if (System.IO.File.Exists(d.Name + @"ProgramFiles\Steam\steamapps\common\Counter-Strike Global Offensive\csgo.exe"))
                     {
-                        Ghoster.csgoPath = d.Name + @"ProgramFiles\Steam\steamapps\common\Counter-Strike Global Offensive";
+                        GhosterSettings.csgoPath = d.Name + @"ProgramFiles\Steam\steamapps\common\Counter-Strike Global Offensive";
                     }
                     else if (System.IO.File.Exists(d.Name + @"Program Files\Steam\steamapps\common\Counter-Strike Global Offensive\csgo.exe"))
                     {
-                        Ghoster.csgoPath = d.Name + @"Program Files\Steam\steamapps\common\Counter-Strike Global Offensive";
+                        GhosterSettings.csgoPath = d.Name + @"Program Files\Steam\steamapps\common\Counter-Strike Global Offensive";
                     }
                     else if (System.IO.File.Exists(d.Name + @"Program Files (x86)\Steam\steamapps\common\Counter-Strike Global Offensive\csgo.exe"))
                     {
-                        Ghoster.csgoPath = d.Name + @"Program Files (x86)\Steam\steamapps\common\Counter-Strike Global Offensive";
+                        GhosterSettings.csgoPath = d.Name + @"Program Files (x86)\Steam\steamapps\common\Counter-Strike Global Offensive";
                     }
                     else if (System.IO.File.Exists(d.Name + @"Steam\steamapps\common\Counter-Strike Global Offensive\csgo.exe"))
                     {
-                        Ghoster.csgoPath = d.Name + @"Steam\steamapps\common\Counter-Strike Global Offensive";
+                        GhosterSettings.csgoPath = d.Name + @"Steam\steamapps\common\Counter-Strike Global Offensive";
                     }
                     else if (System.IO.File.Exists(d.Name + @"SteamLibrary\steamapps\common\Counter-Strike Global Offensive\csgo.exe"))
                     {
-                        Ghoster.csgoPath = d.Name + @"SteamLibrary\steamapps\common\Counter-Strike Global Offensive";
+                        GhosterSettings.csgoPath = d.Name + @"SteamLibrary\steamapps\common\Counter-Strike Global Offensive";
                     }
                 }
-                if (Ghoster.csgoPath == null)
+                if (GhosterSettings.csgoPath == null)
                 {   // Show new form to manually add the csgo path to
                     MessageBox.Show("Ooops! It seems like CSGO Ghoster couldn't find your csgo folder! Please enter your path manually!", "Csgo path not found!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     using (Form2 f2 = new Form2())
@@ -154,21 +117,21 @@ namespace CSGO_Ghoster
                         f2.ShowDialog(this);
                     }
 
-                    while (Ghoster.csgoPath == null)
+                    while (GhosterSettings.csgoPath == null)
                     {
-                        if (File.Exists(Ghoster.csgoPath_Path))
+                        if (File.Exists(GhosterSettings.csgoPath_Path))
                         {
-                            Ghoster.csgoPath = File.ReadAllText(Ghoster.csgoPath_Path);
+                            GhosterSettings.csgoPath = File.ReadAllText(GhosterSettings.csgoPath_Path);
                             break;
                         }
                     }
-                    DebugBox.Text = DebugBox.Text + "\nFound new csgo path after error: \"" + Ghoster.csgoPath + "\"";
+                    DebugBox.Text = DebugBox.Text + "\nFound new csgo path after error: \"" + GhosterSettings.csgoPath + "\"";
                 }
                 else
                 {
-                    DebugBox.Text = DebugBox.Text + "\nFound new csgo path when searching: \"" + Ghoster.csgoPath + "\"";
-                    (new FileInfo(Form1.Ghoster.csgoPath_Path)).Directory.Create();
-                    File.WriteAllText(Form1.Ghoster.csgoPath_Path, Ghoster.csgoPath);
+                    DebugBox.Text = DebugBox.Text + "\nFound new csgo path when searching: \"" + GhosterSettings.csgoPath + "\"";
+                    (new FileInfo(GhosterSettings.csgoPath_Path)).Directory.Create();
+                    File.WriteAllText(GhosterSettings.csgoPath_Path, GhosterSettings.csgoPath);
                 }
 
                 MessageBox.Show("Please restart CSGO to ensure Ghoster to work properly");
@@ -177,34 +140,34 @@ namespace CSGO_Ghoster
 
         public void LoadSettings()
         {
-            if (File.Exists(Ghoster.settings_Path))
+            if (File.Exists(GhosterSettings.settings_Path))
             {
                 DebugBox.Text = DebugBox.Text + "\nLoading saved settings from data file...";
 
                 // Setup default values
-                Ghoster.showDebugger = false;
+                GhosterSettings.showDebugger = false;
                 DebugBox.Visible = false;
-                Ghoster.showStatus = true;
+                GhosterSettings.showStatus = true;
                 statusLabel.Visible = true;
                 BackColor = Color.WhiteSmoke;
-                Ghoster.map_top = 42;
-                Ghoster.map_left = 2;
-                Ghoster.map_size = 310;
-                Ghoster.map_prefer_spectate_radar = false;
+                GhosterSettings.map_top = 42;
+                GhosterSettings.map_left = 2;
+                GhosterSettings.map_size = 310;
+                GhosterSettings.map_prefer_spectate_radar = false;
 
-                Ghoster.player_height = false;
-                Ghoster.player_names = false;
-                Ghoster.player_hp = false;
-                Ghoster.player_weapons = false;
+                GhosterSettings.player_height = false;
+                GhosterSettings.player_names = false;
+                GhosterSettings.player_hp = false;
+                GhosterSettings.player_weapons = false;
 
-                Ghoster.publicPort = Ghoster.standardPort;
+                GhosterSettings.publicPort = GhosterSettings.standardPort;
                 WebClient webClient = new WebClient();
-                Ghoster.publicIp = webClient.DownloadString("https://api.ipify.org");
+                GhosterSettings.publicIp = webClient.DownloadString("https://api.ipify.org");
 
 
                 // Read the file and display it line by line.  
                 string line;
-                System.IO.StreamReader file = new System.IO.StreamReader(Ghoster.settings_Path);
+                System.IO.StreamReader file = new System.IO.StreamReader(GhosterSettings.settings_Path);
 
                 while ((line = file.ReadLine()) != null)
                 {
@@ -213,28 +176,28 @@ namespace CSGO_Ghoster
                         string[] setting = line.Split(':');
                         if (setting[0] == "MapTop" && setting[1] != "")
                         {
-                            Ghoster.map_top = Int32.Parse(setting[1].ToString());
-                            DebugBox.Text = DebugBox.Text + "\n-    Map Top Margin: " + Ghoster.map_top.ToString();
+                            GhosterSettings.map_top = Int32.Parse(setting[1].ToString());
+                            DebugBox.Text = DebugBox.Text + "\n-    Map Top Margin: " + GhosterSettings.map_top.ToString();
                         }
                         if (setting[0] == "MapLeft" && setting[1] != "")
                         {
-                            Ghoster.map_left = Int32.Parse(setting[1].ToString());
-                            DebugBox.Text = DebugBox.Text + "\n-    Map Left Margin: " + Ghoster.map_left.ToString();
+                            GhosterSettings.map_left = Int32.Parse(setting[1].ToString());
+                            DebugBox.Text = DebugBox.Text + "\n-    Map Left Margin: " + GhosterSettings.map_left.ToString();
                         }
                         if (setting[0] == "MapSize" && setting[1] != "")
                         {
-                            Ghoster.map_size = Int32.Parse(setting[1].ToString());
-                            DebugBox.Text = DebugBox.Text + "\n-    Map Size: " + Ghoster.map_size.ToString();
+                            GhosterSettings.map_size = Int32.Parse(setting[1].ToString());
+                            DebugBox.Text = DebugBox.Text + "\n-    Map Size: " + GhosterSettings.map_size.ToString();
                         }
                         if (setting[0] == "Ip" && setting[1] != "")
                         {
-                            Ghoster.publicIp = setting[1];
-                            DebugBox.Text = DebugBox.Text + "\n-    Custom IP: " + Ghoster.publicIp.ToString();
+                            GhosterSettings.publicIp = setting[1];
+                            DebugBox.Text = DebugBox.Text + "\n-    Custom IP: " + GhosterSettings.publicIp.ToString();
                         }
                         if (setting[0] == "Port" && setting[1] != "")
                         {
-                            Ghoster.publicPort = setting[1];
-                            DebugBox.Text = DebugBox.Text + "\n-    Custom Port: " + Ghoster.publicPort.ToString();
+                            GhosterSettings.publicPort = setting[1];
+                            DebugBox.Text = DebugBox.Text + "\n-    Custom Port: " + GhosterSettings.publicPort.ToString();
                         }
                         if (setting[0] == "transparent" && setting[1] != "")
                         {
@@ -253,39 +216,39 @@ namespace CSGO_Ghoster
                         }
                         else if (line == "debug")
                         {
-                            Ghoster.showDebugger = true;
+                            GhosterSettings.showDebugger = true;
                             DebugBox.Visible = true;
                             DebugBox.Text = DebugBox.Text + "\n-    Debug Mode on.";
                         }
                         else if (line == "hideStatus")
                         {
                             statusLabel.Visible = false;
-                            Ghoster.showStatus = false;
+                            GhosterSettings.showStatus = false;
                             DebugBox.Text = DebugBox.Text + "\n-    Hiding Status Information...";
                         }
                         else if (line == "playerNames")
                         {
-                            Ghoster.player_names = true;
+                            GhosterSettings.player_names = true;
                             DebugBox.Text = DebugBox.Text + "\n-    Player Names on.";
                         }
                         else if (line == "playerWeapons")
                         {
-                            Ghoster.player_weapons = true;
+                            GhosterSettings.player_weapons = true;
                             DebugBox.Text = DebugBox.Text + "\n-    Player Weapons on.";
                         }
                         else if (line == "playerHp")
                         {
-                            Ghoster.player_hp = true;
+                            GhosterSettings.player_hp = true;
                             DebugBox.Text = DebugBox.Text + "\n-    Player HP on.";
                         }
                         else if (line == "playerHeight")
                         {
-                            Ghoster.player_height = true;
+                            GhosterSettings.player_height = true;
                             DebugBox.Text = DebugBox.Text + "\n-    Player Height on.";
                         }
                         else if (line == "preferSpectateRadar")
                         {
-                            Ghoster.map_prefer_spectate_radar = true;
+                            GhosterSettings.map_prefer_spectate_radar = true;
                             DebugBox.Text = DebugBox.Text + "\n-    Prefer Spectate Radar on.";
                         }
                         else
@@ -302,15 +265,15 @@ namespace CSGO_Ghoster
                 DebugBox.Text = DebugBox.Text + "\nNo data file found...";
             }
             // After reading all saved settings, apply changes to other variables aswell...
-            Ghoster.publicHttpUri = "http://" + Form1.Ghoster.publicIp + @":" + Form1.Ghoster.publicPort;
+            GhosterSettings.publicHttpUri = "http://" + GhosterSettings.publicIp + @":" + GhosterSettings.publicPort;
 
-            statusLabel.Visible = Ghoster.showStatus;
-            DebugBox.Visible = Ghoster.showDebugger;
+            statusLabel.Visible = GhosterSettings.showStatus;
+            DebugBox.Visible = GhosterSettings.showDebugger;
             this.Width = this.Height - 2 * 12;
 
             // Print public ip for debugpurposes
-            DebugBox.Text = DebugBox.Text + "\nUsing IP: " + Ghoster.publicIp;
-            DebugBox.Text = DebugBox.Text + "\nUsing Port: " + Ghoster.publicPort;
+            DebugBox.Text = DebugBox.Text + "\nUsing IP: " + GhosterSettings.publicIp;
+            DebugBox.Text = DebugBox.Text + "\nUsing Port: " + GhosterSettings.publicPort;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -320,42 +283,7 @@ namespace CSGO_Ghoster
             GetLocalMaps();
             LoadSettings();
             GhosterWindowInformationLabel.Visible = false;
-            
-            // Create the cfg path
-            Ghoster.cfg_Path = Ghoster.csgoPath + @"\csgo\cfg\gamestate_integration_ghoster_v" + Ghoster.version + @".cfg";
-            // Create the gamestate_integration cfg file
-            string integration_code = @"'CSGO Ghoster v " + Ghoster.version + @"'
-{
-	'uri' '" + Ghoster.publicHttpUri + @"'
-	'timeout' '5.0'
-    'buffer'  '0.1'
-    'throttle' '0.1'
-    'heartbeat' '.1'
-
-    'auth'
-	{
-		'token'				'CSGO_Ghoster_" + Ghoster.version + @"'
-	}
-	'data'
-	{
-		'provider'              	'1'
-		'map'                   	'1'
-		'round'                 	'1'
-		'player_id'					'1'
-		'player_weapons'			'1'
-		'player_match_stats'		'1'
-		'player_state'				'1'
-		'allplayers_position'       '1'
-        'allplayers_id'				'1'
-		'allplayers_state'			'1'
-		'allplayers_match_stats'	'1'
-	}
-}";
-            integration_code = integration_code.Replace('\'', '"'); // Replace all ' with "...
-
-            (new FileInfo(Form1.Ghoster.cfg_Path)).Directory.Create();
-            File.WriteAllText(Form1.Ghoster.cfg_Path, integration_code);
-            DebugBox.Text = DebugBox.Text + "\nCreated cfg file: " + Ghoster.cfg_Path;
+            CheckForIllegalCrossThreadCalls = false;
         }
 
         private void ipTextBox_TextChanged(object sender, EventArgs e)
@@ -372,22 +300,15 @@ namespace CSGO_Ghoster
 
         private void startGhostLocalButton_Click(object sender, EventArgs e)
         {
-            startGhostLocalButton.Enabled = false;
-
-            Ghoster.GhostingType = "Local";
-            Program.IntegrateGame();
             MessageBox.Show("OBS! Change your video settings to 'fullscreen windowed'!", "Important!", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            while (CSGO_Ghoster.Program.isGhosting)
-            {
-                DebugBox.Text = DebugBox.Text + "\n> Ghosting Local match!";
-            }
-
-            // End of Local ghosting
-            DebugBox.Text = DebugBox.Text + "\n> Ghosting match stopped...";
-            statusLabel.Text = "Ghosting match stopped...";
-            startGhostLocalButton.Enabled = true;
+            // Start Ghosting
+            Thread localMatchGhoster = new Thread(GhosterCore.StartLocalGhosting);
+            localMatchGhoster.IsBackground = true; // <-- Set the thread to background
+            localMatchGhoster.Start();                                                                           // Start Local Match Ghosting Thread
         }
+
+        #region Setup for window on top
 
         private static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
         private const UInt32 SWP_NOSIZE = 0x0001;
@@ -399,6 +320,9 @@ namespace CSGO_Ghoster
         public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
 
         [System.Runtime.InteropServices.ComVisible(true)]
+
+        #endregion
+
 
         private void Form1_Deactivate(object sender, EventArgs e)
         {
@@ -432,8 +356,8 @@ namespace CSGO_Ghoster
             replaceMapButton.Visible = true;
             settingsButton.Visible = true;
 
-            DebugBox.Visible = Ghoster.showDebugger;
-            statusLabel.Visible = Ghoster.showStatus;
+            DebugBox.Visible = GhosterSettings.showDebugger;
+            statusLabel.Visible = GhosterSettings.showStatus;
         }
 
         private void startGhostingButton_Click(object sender, EventArgs e)
@@ -442,26 +366,19 @@ namespace CSGO_Ghoster
             {
                 if (ipTextBox.Text.Contains(":")) // Use custom port provided
                 {
-                    statusLabel.Text = "Attempting to connect to " + Ghoster.externalGhostIp + "...";
-                    Ghoster.externalHttpUri = "http://" + Ghoster.externalGhostIp;
+                    statusLabel.Text = "Attempting to connect to " + GhosterSettings.externalGhostIp + "...";
+                    GhosterSettings.externalHttpUri = "http://" + GhosterSettings.externalGhostIp;
                 }
                 else
                 {
-                    statusLabel.Text = "Attempting to connect to " + Ghoster.externalGhostIp + ":" + Ghoster.standardPort + "...";
-                    Ghoster.externalHttpUri = "http://"+ Ghoster.externalGhostIp + ":" + Ghoster.standardPort;
+                    statusLabel.Text = "Attempting to connect to " + GhosterSettings.externalGhostIp + ":" + GhosterSettings.standardPort + "...";
+                    GhosterSettings.externalHttpUri = "http://"+ GhosterSettings.externalGhostIp + ":" + GhosterSettings.standardPort;
                 }
 
                 // Start Ghosting
-                Ghoster.GhostingType = "External";
-                Program.IntegrateGame();
-                MessageBox.Show("OBS! Change your video settings to 'fullscreen windowed'!", "Important!", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                startGhostingButton.Enabled = false;
-
-                while (CSGO_Ghoster.Program.isGhosting)
-                {
-                    DebugBox.Text = DebugBox.Text + "\n> Ghosting External match!";
-                }
+                Thread onlineMatchGhoster = new Thread(GhosterCore.StartRemoteGhosting);
+                onlineMatchGhoster.IsBackground = true; // <-- Set the thread to background
+                onlineMatchGhoster.Start();                                                                           // Start Online Match Ghosting Thread
 
                 // End of Local ghosting
                 DebugBox.Text = DebugBox.Text + "\n> Ghosting match stopped...";
@@ -485,8 +402,8 @@ namespace CSGO_Ghoster
             DebugBox.Text = DebugBox.Text + "\nUse map activated...";
 
             //Location = System.Drawing.Point.Empty;
-            Location = new Point(Ghoster.map_left, Ghoster.map_top);
-            Size = new Size(Ghoster.map_size - (2 * 12), Ghoster.map_size);
+            Location = new Point(GhosterSettings.map_left, GhosterSettings.map_top);
+            Size = new Size(GhosterSettings.map_size - (2 * 12), GhosterSettings.map_size);
 
             GhosterWindowInformationLabel.Visible = false;
         }
@@ -514,8 +431,8 @@ namespace CSGO_Ghoster
             GhosterWindowInformationLabel.Visible = true;
             GhosterWindowInformationLabel.Location = new Point(Width / 2 - 2 * GhosterWindowInformationLabel.Width /3, Height / 2 - GhosterWindowInformationLabel.Height);
 
-            GhosterWindowInformationLabel.Text = @"Top: " + Location.X + @"
-Left: " + Location.Y;
+            GhosterWindowInformationLabel.Text = @"Top: " + Location.Y + @"
+Left: " + Location.X;
         }
 
         private void Form1_MouseUp(object sender, MouseEventArgs e)
@@ -532,6 +449,17 @@ Left: " + Location.Y;
         {
             DebugBox.ScrollBars = RichTextBoxScrollBars.ForcedVertical;
             DebugBox.Show();
+        }
+
+        private void GhosterWindowInformationLabel_Click(object sender, EventArgs e)
+        {
+            Visible = false;
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Environment.Exit(Environment.ExitCode);
+            Application.Exit();
         }
     }
 }

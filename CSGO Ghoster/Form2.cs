@@ -35,8 +35,8 @@ namespace CSGO_Ghoster
             if (File.Exists(textBox1.Text + @"\csgo.exe"))
             {
                 MessageBox.Show("Successfully found csgo path!", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                (new FileInfo(Form1.Ghoster.csgoPath_Path)).Directory.Create();
-                File.WriteAllText(Form1.Ghoster.csgoPath_Path, textBox1.Text);
+                (new FileInfo(GhosterSettings.csgoPath_Path)).Directory.Create();
+                File.WriteAllText(GhosterSettings.csgoPath_Path, textBox1.Text);
                 this.Close();
             }else
             {

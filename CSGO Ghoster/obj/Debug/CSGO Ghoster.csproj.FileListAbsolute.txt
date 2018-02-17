@@ -19,3 +19,30 @@ D:\Documents\Visual Studio repos\CSGO Ghoster\CSGO Ghoster\bin\Debug\Tao.OpenGl.
 D:\Documents\Visual Studio repos\CSGO Ghoster\CSGO Ghoster\bin\Debug\Tao.FreeGlut.xml
 D:\Documents\Visual Studio repos\CSGO Ghoster\CSGO Ghoster\bin\Debug\Tao.OpenGl.xml
 D:\Documents\Visual Studio repos\CSGO Ghoster\CSGO Ghoster\bin\Debug\Magick.NET-Q16-AnyCPU.dll
+D:\GitHub\CSGO Ghoster\CSGO Ghoster\bin\Debug\CSGO Ghoster.exe.config
+D:\GitHub\CSGO Ghoster\CSGO Ghoster\bin\Debug\CSGO Ghoster.exe
+D:\GitHub\CSGO Ghoster\CSGO Ghoster\bin\Debug\CSGO Ghoster.pdb
+D:\GitHub\CSGO Ghoster\CSGO Ghoster\bin\Debug\CSGSI.dll
+D:\GitHub\CSGO Ghoster\CSGO Ghoster\bin\Debug\DevIL.NET.dll
+D:\GitHub\CSGO Ghoster\CSGO Ghoster\bin\Debug\Magick.NET-Q16-AnyCPU.dll
+D:\GitHub\CSGO Ghoster\CSGO Ghoster\bin\Debug\Newtonsoft.Json.dll
+D:\GitHub\CSGO Ghoster\CSGO Ghoster\bin\Debug\Tao.FreeGlut.dll
+D:\GitHub\CSGO Ghoster\CSGO Ghoster\bin\Debug\Tao.OpenGl.dll
+D:\GitHub\CSGO Ghoster\CSGO Ghoster\bin\Debug\Tao.FreeGlut.xml
+D:\GitHub\CSGO Ghoster\CSGO Ghoster\bin\Debug\Tao.OpenGl.xml
+D:\GitHub\CSGO Ghoster\CSGO Ghoster\obj\Debug\CSGO_Ghoster.Form1.resources
+D:\GitHub\CSGO Ghoster\CSGO Ghoster\obj\Debug\CSGO_Ghoster.Form2.resources
+D:\GitHub\CSGO Ghoster\CSGO Ghoster\obj\Debug\CSGO_Ghoster.Form3.resources
+D:\GitHub\CSGO Ghoster\CSGO Ghoster\obj\Debug\CSGO_Ghoster.Properties.Resources.resources
+D:\GitHub\CSGO Ghoster\CSGO Ghoster\obj\Debug\CSGO Ghoster.csproj.GenerateResource.Cache
+D:\GitHub\CSGO Ghoster\CSGO Ghoster\obj\Debug\CSGO Ghoster.csproj.CoreCompileInputs.cache
+D:\GitHub\CSGO Ghoster\CSGO Ghoster\obj\Debug\CSGO Ghoster.exe
+D:\GitHub\CSGO Ghoster\CSGO Ghoster\obj\Debug\CSGO Ghoster.pdb
+D:\GitHub\CSGO Ghoster\CSGO Ghoster\bin\Debug\VAMemory.dll
+D:\GitHub\CSGO Ghoster\CSGO Ghoster\bin\Debug\MetroFramework.Design.dll
+D:\GitHub\CSGO Ghoster\CSGO Ghoster\bin\Debug\MetroFramework.dll
+D:\GitHub\CSGO Ghoster\CSGO Ghoster\bin\Debug\MetroFramework.Fonts.dll
+D:\GitHub\CSGO Ghoster\CSGO Ghoster\bin\Debug\CircularProgressBar.dll
+D:\GitHub\CSGO Ghoster\CSGO Ghoster\bin\Debug\WinFormAnimation.dll
+D:\GitHub\CSGO Ghoster\CSGO Ghoster\bin\Debug\CircularProgressBar.xml
+D:\GitHub\CSGO Ghoster\CSGO Ghoster\bin\Debug\WinFormAnimation.xml

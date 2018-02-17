@@ -226,7 +226,6 @@
             this.comboBox1.Items.AddRange(new object[] {
             "Default",
             "Blue",
-            "Green",
             "Red",
             "Gold"});
             this.comboBox1.Location = new System.Drawing.Point(12, 92);

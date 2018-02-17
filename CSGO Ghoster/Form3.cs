@@ -20,7 +20,7 @@ namespace CSGO_Ghoster
 
         private void applySettingsButton_Click(object sender, EventArgs e)
         {
-            string path = Form1.Ghoster.settings_Path;
+            string path = GhosterSettings.settings_Path;
             bool settingsError = false;
 
             if (File.Exists(path)) // Delete old settings
@@ -38,10 +38,6 @@ namespace CSGO_Ghoster
                 if (checkBox4.Checked)  // Add status
                 {
                     sw.WriteLine("hideStatus");
-                }
-                if (checkBox2.Checked)  // Add transparent
-                {
-                    sw.WriteLine("transparent");
                 }
 
 
@@ -127,6 +123,16 @@ namespace CSGO_Ghoster
                         {
                             sw.WriteLine("transparent:" + comboBox1.SelectedItem.ToString());
                         }
+                        else
+                        {
+                            // Add just transparent
+                            sw.WriteLine("transparent");
+                        }
+                    }
+                    else
+                    {
+                        // Add just transparent
+                        sw.WriteLine("transparent");
                     }
                 }
             }
@@ -140,7 +146,7 @@ namespace CSGO_Ghoster
         private void Form3_Load(object sender, EventArgs e)
         {
             TopMost = true;
-            string path = Form1.Ghoster.settings_Path;
+            string path = GhosterSettings.settings_Path;
             if (File.Exists(path)) // Load old settings
             {
                 // Read the file and display it line by line.  
@@ -175,6 +181,7 @@ namespace CSGO_Ghoster
                         if (setting[0] == "transparent" && setting[1] != "")
                         {
                             comboBox1.SelectedItem = setting[1];
+                            checkBox2.Checked = true;
                         }
                     }
                     else
@@ -223,7 +230,7 @@ namespace CSGO_Ghoster
             DialogResult clearMaps = MessageBox.Show("Are you sure you want to clear your map library?", "Remove all saved maps?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (clearMaps == DialogResult.Yes)
             {
-                string[] maps = Directory.GetFiles(Form1.Ghoster.maps_Path, "*.png");
+                string[] maps = Directory.GetFiles(GhosterSettings.maps_Path, "*.png");
                 foreach(string map in maps)
                 {
                     File.Delete(map);
