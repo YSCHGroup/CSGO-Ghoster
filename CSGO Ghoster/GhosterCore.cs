@@ -24,6 +24,9 @@ namespace CSGO_Ghoster
 
         #region Setup
 
+        [DllImport("kernel32.dll")]
+        public static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
+
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern bool ReadProcessMemory( IntPtr hProcess,  IntPtr lpBaseAddress, [Out] byte[] lpBuffer, int dwSize, out IntPtr lpNumberOfBytesRead);
 
@@ -37,7 +40,6 @@ namespace CSGO_Ghoster
 		engine.dll+7AE9B9
 		engine.dll+826688
         */
-
         public static string LocalProcessName = "csgo";
         public static int bClient;
         public static int bEngine;
@@ -124,7 +126,13 @@ namespace CSGO_Ghoster
 
                 while (true)
                 {
-                    GhosterCore.DrawPlayer(1, 4, 4);
+                    PlaceOnTop();
+
+                    /*string map_name = vam.ReadStringASCII();
+
+                    f.DebugBox.Text += "map_name";
+
+                    GhosterCore.DrawPlayer(1, 15, 15);*/
                     //break;
                 }
 
@@ -158,23 +166,23 @@ namespace CSGO_Ghoster
             f.DebugBox.Text = f.DebugBox.Text + "\n> Remote Ghosting match stopped...";
             f.statusLabel.Text = "Remote Ghosting match stopped...";
         }
+
         public static void DrawPlayer(int team, int x, int y)
         {
             Form1 f = Application.OpenForms["Form1"] as Form1;
 
-            if (Form1.ActiveForm == null )
+            if (f == null )
              {
                  return;
              }
 
             //Graphics g = Form1.ActiveForm.CreateGraphics();
             //Graphics g = f.CreateGraphics();
-            System.Drawing.Graphics g;
-            g = Form1.ActiveForm.CreateGraphics();
+            System.Drawing.Graphics g = f.CreateGraphics();
 
-            Form1.ActiveForm.Refresh();
+            f.Refresh();
 
-            int drawPlayerRadius = 2;
+            int drawPlayerRadius = GhosterSettings.radar_player_size;
 
             switch (team)
             {
@@ -201,7 +209,7 @@ namespace CSGO_Ghoster
             Form1 f = Application.OpenForms["Form1"] as Form1;
             f.settingsButton.Enabled = false;
             f.startGhostLocalButton.Enabled = false;
-            f.startGhostingButton.Enabled = false;
+            f.startRemoteGhostingButton.Enabled = false;
             f.ipTextBox.Enabled = false;
         }
 
@@ -210,8 +218,34 @@ namespace CSGO_Ghoster
             Form1 f = Application.OpenForms["Form1"] as Form1;
             f.settingsButton.Enabled = true;
             f.startGhostLocalButton.Enabled = true;
-            f.startGhostingButton.Enabled = true;
+            f.startRemoteGhostingButton.Enabled = true;
             f.ipTextBox.Enabled = true;
+        }
+
+
+
+        #region Setup for window on top
+
+        private static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
+        private const UInt32 SWP_NOSIZE = 0x0001;
+        private const UInt32 SWP_NOMOVE = 0x0002;
+        private const UInt32 TOPMOST_FLAGS = SWP_NOMOVE | SWP_NOSIZE | 0x0200 | 0x0040;
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+
+        [System.Runtime.InteropServices.ComVisible(true)]
+
+        #endregion
+
+
+        public static void PlaceOnTop()
+        {
+            // Place on top of all other applications or games etc...
+            Form1 f = Application.OpenForms["Form1"] as Form1;
+            SetWindowPos(f.Handle, HWND_TOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
+            f.TopMost = true;
         }
     }
 }

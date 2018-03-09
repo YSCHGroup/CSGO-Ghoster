@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using System.Net;
+using System.Threading;
 
 namespace CSGO_Ghoster
 {
@@ -42,5 +43,12 @@ namespace CSGO_Ghoster
         public static bool player_weapons { get; set; }
         public static bool player_hp { get; set; }
         public static bool player_height { get; set; }
+
+        public static int radar_player_size { get; set; } = 5;
+
+        
+
+        // Create all threads
+        public static Thread localMatchGhoster = new Thread(GhosterCore.StartLocalGhosting);
     }
 }

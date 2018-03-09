@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.ipTextBox = new System.Windows.Forms.TextBox();
-            this.startGhostingButton = new System.Windows.Forms.Button();
+            this.startRemoteGhostingButton = new System.Windows.Forms.Button();
             this.startGhostLocalButton = new System.Windows.Forms.Button();
             this.statusLabel = new System.Windows.Forms.Label();
             this.toolTipsGhoster = new System.Windows.Forms.ToolTip(this.components);
@@ -55,18 +55,18 @@
             this.ipTextBox.TabIndex = 0;
             this.ipTextBox.TextChanged += new System.EventHandler(this.ipTextBox_TextChanged);
             // 
-            // startGhostingButton
+            // startRemoteGhostingButton
             // 
-            this.startGhostingButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.startGhostingButton.Enabled = false;
-            this.startGhostingButton.Location = new System.Drawing.Point(115, -2);
-            this.startGhostingButton.Name = "startGhostingButton";
-            this.startGhostingButton.Size = new System.Drawing.Size(75, 23);
-            this.startGhostingButton.TabIndex = 1;
-            this.startGhostingButton.Text = "Ghost IP";
-            this.toolTipsGhoster.SetToolTip(this.startGhostingButton, "Ghost another match");
-            this.startGhostingButton.UseVisualStyleBackColor = true;
-            this.startGhostingButton.Click += new System.EventHandler(this.startGhostingButton_Click);
+            this.startRemoteGhostingButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.startRemoteGhostingButton.Enabled = false;
+            this.startRemoteGhostingButton.Location = new System.Drawing.Point(115, -2);
+            this.startRemoteGhostingButton.Name = "startRemoteGhostingButton";
+            this.startRemoteGhostingButton.Size = new System.Drawing.Size(75, 23);
+            this.startRemoteGhostingButton.TabIndex = 1;
+            this.startRemoteGhostingButton.Text = "Ghost IP";
+            this.toolTipsGhoster.SetToolTip(this.startRemoteGhostingButton, "Ghost another match");
+            this.startRemoteGhostingButton.UseVisualStyleBackColor = true;
+            this.startRemoteGhostingButton.Click += new System.EventHandler(this.startRemoteGhostingButton_Click);
             // 
             // startGhostLocalButton
             // 
@@ -167,7 +167,7 @@
             this.Controls.Add(this.settingsButton);
             this.Controls.Add(this.replaceMapButton);
             this.Controls.Add(this.ipTextBox);
-            this.Controls.Add(this.startGhostingButton);
+            this.Controls.Add(this.startRemoteGhostingButton);
             this.Controls.Add(this.startGhostLocalButton);
             this.Controls.Add(this.statusLabel);
             this.Controls.Add(this.DebugBox);
@@ -195,7 +195,7 @@
         #endregion
 
         public System.Windows.Forms.TextBox ipTextBox;
-        public System.Windows.Forms.Button startGhostingButton;
+        public System.Windows.Forms.Button startRemoteGhostingButton;
         public System.Windows.Forms.Button startGhostLocalButton;
         public System.Windows.Forms.PictureBox MapImage;
         public System.Windows.Forms.Label statusLabel;

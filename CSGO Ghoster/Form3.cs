@@ -114,6 +114,11 @@ namespace CSGO_Ghoster
                     }
                 }
 
+                if (textBox6.Text.Length > 0)
+                {
+                    sw.WriteLine("playerDotSize:" + textBox6.Text);
+                }
+
                 // ComboBoxes
                 if (comboBox1.Enabled)
                 {
@@ -135,6 +140,10 @@ namespace CSGO_Ghoster
                         sw.WriteLine("transparent");
                     }
                 }
+
+                // Color pickers
+
+
             }
 
             if (!settingsError)
@@ -182,6 +191,10 @@ namespace CSGO_Ghoster
                         {
                             comboBox1.SelectedItem = setting[1];
                             checkBox2.Checked = true;
+                        }
+                        if (setting[0] == "playerDotSize" && setting[1] != "")
+                        {
+                            textBox6.Text = setting[1];
                         }
                     }
                     else

@@ -48,6 +48,8 @@
             this.checkBox7 = new System.Windows.Forms.CheckBox();
             this.checkBox8 = new System.Windows.Forms.CheckBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -59,6 +61,12 @@
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.label10 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
+            this.ctColorPicker = new DevExpress.XtraEditors.ColorPickEdit();
+            this.tColorPicker = new DevExpress.XtraEditors.ColorPickEdit();
+            this.label13 = new System.Windows.Forms.Label();
+            this.textBox6 = new System.Windows.Forms.TextBox();
+            ((System.ComponentModel.ISupportInitialize)(this.ctColorPicker.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tColorPicker.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // checkBox2
@@ -107,7 +115,7 @@
             // applySettingsButton
             // 
             this.applySettingsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.applySettingsButton.Location = new System.Drawing.Point(265, 353);
+            this.applySettingsButton.Location = new System.Drawing.Point(265, 455);
             this.applySettingsButton.Name = "applySettingsButton";
             this.applySettingsButton.Size = new System.Drawing.Size(106, 23);
             this.applySettingsButton.TabIndex = 6;
@@ -118,9 +126,10 @@
             // MapPositionLabel
             // 
             this.MapPositionLabel.AutoSize = true;
+            this.MapPositionLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MapPositionLabel.Location = new System.Drawing.Point(194, 50);
             this.MapPositionLabel.Name = "MapPositionLabel";
-            this.MapPositionLabel.Size = new System.Drawing.Size(121, 13);
+            this.MapPositionLabel.Size = new System.Drawing.Size(144, 13);
             this.MapPositionLabel.TabIndex = 7;
             this.MapPositionLabel.Text = "(Use) Map Configuration";
             // 
@@ -178,7 +187,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 286);
+            this.label7.Location = new System.Drawing.Point(7, 385);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(73, 13);
             this.label7.TabIndex = 17;
@@ -188,7 +197,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 309);
+            this.label8.Location = new System.Drawing.Point(7, 408);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(98, 13);
             this.label8.TabIndex = 18;
@@ -198,7 +207,7 @@
             // checkBox7
             // 
             this.checkBox7.AutoSize = true;
-            this.checkBox7.Location = new System.Drawing.Point(165, 190);
+            this.checkBox7.Location = new System.Drawing.Point(13, 259);
             this.checkBox7.Name = "checkBox7";
             this.checkBox7.Size = new System.Drawing.Size(144, 17);
             this.checkBox7.TabIndex = 24;
@@ -235,11 +244,31 @@
             this.comboBox1.Text = "Transparency Key";
             this.toolTip1.SetToolTip(this.comboBox1, "The color to use when the window is transparent...");
             // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(194, 191);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(94, 13);
+            this.label11.TabIndex = 31;
+            this.label11.Text = "• CT Primary Color";
+            this.toolTip1.SetToolTip(this.label11, "The CT\'s Team Color");
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(197, 237);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(87, 13);
+            this.label12.TabIndex = 32;
+            this.label12.Text = "• T Primary Color";
+            this.toolTip1.SetToolTip(this.label12, "The T\'s Team Color");
+            // 
             // label4
             // 
             this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(248, 379);
+            this.label4.Location = new System.Drawing.Point(248, 481);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(123, 13);
             this.label4.TabIndex = 14;
@@ -248,31 +277,33 @@
             // label5
             // 
             this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.Location = new System.Drawing.Point(10, 50);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(95, 13);
+            this.label5.Size = new System.Drawing.Size(113, 13);
             this.label5.TabIndex = 15;
             this.label5.Text = "Form Configuration";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(7, 263);
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(8, 362);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(126, 13);
+            this.label6.Size = new System.Drawing.Size(150, 13);
             this.label6.TabIndex = 16;
             this.label6.Text = "Networking Configuration";
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(110, 306);
+            this.textBox4.Location = new System.Drawing.Point(111, 405);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(125, 20);
             this.textBox4.TabIndex = 19;
             // 
             // textBox5
             // 
-            this.textBox5.Location = new System.Drawing.Point(110, 283);
+            this.textBox5.Location = new System.Drawing.Point(111, 382);
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new System.Drawing.Size(125, 20);
             this.textBox5.TabIndex = 20;
@@ -280,9 +311,10 @@
             // label9
             // 
             this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.Location = new System.Drawing.Point(10, 173);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(145, 13);
+            this.label9.Size = new System.Drawing.Size(172, 13);
             this.label9.TabIndex = 21;
             this.label9.Text = "CS:GO Ghoster Configuration";
             // 
@@ -319,16 +351,17 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(10, 350);
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(11, 449);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(161, 13);
+            this.label10.Size = new System.Drawing.Size(193, 13);
             this.label10.TabIndex = 27;
             this.label10.Text = "CS:GO Ghoster file Configuration";
             // 
             // button1
             // 
             this.button1.BackColor = System.Drawing.Color.LightCoral;
-            this.button1.Location = new System.Drawing.Point(10, 367);
+            this.button1.Location = new System.Drawing.Point(11, 466);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(105, 28);
             this.button1.TabIndex = 28;
@@ -336,11 +369,63 @@
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // ctColorPicker
+            // 
+            this.ctColorPicker.EditValue = System.Drawing.Color.Empty;
+            this.ctColorPicker.Location = new System.Drawing.Point(197, 207);
+            this.ctColorPicker.Name = "ctColorPicker";
+            this.ctColorPicker.Properties.Appearance.BackColor = System.Drawing.Color.DodgerBlue;
+            this.ctColorPicker.Properties.Appearance.Options.UseBackColor = true;
+            this.ctColorPicker.Properties.AutomaticColor = System.Drawing.Color.Black;
+            this.ctColorPicker.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.ctColorPicker.Size = new System.Drawing.Size(135, 20);
+            this.ctColorPicker.TabIndex = 33;
+            this.ctColorPicker.ToolTipTitle = "This changes the Counter Terrorists team\'s colors. (Select White to use standard)" +
+    "";
+            // 
+            // tColorPicker
+            // 
+            this.tColorPicker.EditValue = System.Drawing.Color.Empty;
+            this.tColorPicker.Location = new System.Drawing.Point(197, 253);
+            this.tColorPicker.Name = "tColorPicker";
+            this.tColorPicker.Properties.Appearance.BackColor = System.Drawing.Color.Coral;
+            this.tColorPicker.Properties.Appearance.Options.UseBackColor = true;
+            this.tColorPicker.Properties.AutomaticColor = System.Drawing.Color.Black;
+            this.tColorPicker.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.tColorPicker.Size = new System.Drawing.Size(135, 20);
+            this.tColorPicker.TabIndex = 34;
+            this.tColorPicker.ToolTipTitle = "This changes the Terrorist team\'s colors. (Select White to use standard)";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(8, 288);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(88, 13);
+            this.label13.TabIndex = 35;
+            this.label13.Text = "• Player Dot Size";
+            this.toolTip1.SetToolTip(this.label13, "Each player\'s representing dot\'s radius in pixels");
+            // 
+            // textBox6
+            // 
+            this.textBox6.Location = new System.Drawing.Point(102, 285);
+            this.textBox6.Name = "textBox6";
+            this.textBox6.Size = new System.Drawing.Size(51, 20);
+            this.textBox6.TabIndex = 36;
+            // 
             // Form3
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(383, 401);
+            this.ClientSize = new System.Drawing.Size(383, 503);
+            this.Controls.Add(this.textBox6);
+            this.Controls.Add(this.label13);
+            this.Controls.Add(this.tColorPicker);
+            this.Controls.Add(this.ctColorPicker);
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.label11);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label10);
@@ -374,6 +459,8 @@
             this.Name = "Form3";
             this.Text = "Settings";
             this.Load += new System.EventHandler(this.Form3_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.ctColorPicker.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tColorPicker.Properties)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -409,5 +496,11 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label12;
+        private DevExpress.XtraEditors.ColorPickEdit ctColorPicker;
+        private DevExpress.XtraEditors.ColorPickEdit tColorPicker;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.TextBox textBox6;
     }
 }

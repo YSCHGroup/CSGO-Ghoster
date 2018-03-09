@@ -151,7 +151,7 @@ namespace CSGO_Ghoster
                 statusLabel.Visible = true;
                 BackColor = Color.WhiteSmoke;
                 GhosterSettings.map_top = 42;
-                GhosterSettings.map_left = 2;
+                GhosterSettings.map_left = 3;
                 GhosterSettings.map_size = 310;
                 GhosterSettings.map_prefer_spectate_radar = false;
 
@@ -164,6 +164,7 @@ namespace CSGO_Ghoster
                 WebClient webClient = new WebClient();
                 GhosterSettings.publicIp = webClient.DownloadString("https://api.ipify.org");
 
+                GhosterSettings.radar_player_size = 3;
 
                 // Read the file and display it line by line.  
                 string line;
@@ -204,6 +205,11 @@ namespace CSGO_Ghoster
                             BackColor = Color.FromName(setting[1]);
                             TransparencyKey = Color.FromName(setting[1]);
                             DebugBox.Text = DebugBox.Text + "\n-    Transparent Mode on. (using key: " + setting[1] + ")";
+                        }
+                        if (setting[0] == "playerDotSize" && setting[1] != "")
+                        {
+                            GhosterSettings.radar_player_size = int.Parse(setting[1]);
+                            DebugBox.Text = DebugBox.Text + "\n-    Player Dot Size: " + GhosterSettings.radar_player_size.ToString() + "px";
                         }
                     }
                     else
@@ -290,77 +296,30 @@ namespace CSGO_Ghoster
         {
             if (ipTextBox.Text.Length >= 7)
             {
-                startGhostingButton.Enabled = true;
+                startRemoteGhostingButton.Enabled = true;
             }
             else
             {
-                startGhostingButton.Enabled = false;
+                startRemoteGhostingButton.Enabled = false;
             }
         }
 
         private void startGhostLocalButton_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("OBS! Change your video settings to 'fullscreen windowed'!", "Important!", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
             // Start Ghosting
-            Thread localMatchGhoster = new Thread(GhosterCore.StartLocalGhosting);
-            localMatchGhoster.IsBackground = true; // <-- Set the thread to background
-            localMatchGhoster.Start();                                                                           // Start Local Match Ghosting Thread
+            if (GhosterSettings.localMatchGhoster.ThreadState != ThreadState.Running)
+            {
+                GhosterSettings.localMatchGhoster.Start(); // Start Local Match Ghosting Thread
+                GhosterSettings.localMatchGhoster.IsBackground = true; // <-- Set the thread to background
+            }
+            else
+            {
+                MessageBox.Show("CS:GO Ghoster is already running...", "The thread is already started!",
+                    MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
         }
 
-        #region Setup for window on top
-
-        private static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
-        private const UInt32 SWP_NOSIZE = 0x0001;
-        private const UInt32 SWP_NOMOVE = 0x0002;
-        private const UInt32 TOPMOST_FLAGS = SWP_NOMOVE | SWP_NOSIZE | 0x0200 | 0x0040;
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
-
-        [System.Runtime.InteropServices.ComVisible(true)]
-
-        #endregion
-
-
-        private void Form1_Deactivate(object sender, EventArgs e)
-        {
-            FormBorderStyle = FormBorderStyle.None;
-
-            GhosterWindowInformationLabel.Visible = false;
-
-            ipTextBox.Visible = false;
-            startGhostingButton.Visible = false;
-            startGhostLocalButton.Visible = false;
-            replaceMapButton.Visible = false;
-            settingsButton.Visible = false;
-
-            DebugBox.Visible = false;
-            statusLabel.Visible = false;
-            
-            // Place on top of all other applications or games etc...
-            SetWindowPos(this.Handle, HWND_TOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
-            TopMost = true;
-        }
-
-        private void Form1_Activated(object sender, EventArgs e)
-        {
-            FormBorderStyle = FormBorderStyle.Sizable;
-
-            GhosterWindowInformationLabel.Visible = false;
-
-            ipTextBox.Visible = true;
-            startGhostingButton.Visible = true;
-            startGhostLocalButton.Visible = true;
-            replaceMapButton.Visible = true;
-            settingsButton.Visible = true;
-
-            DebugBox.Visible = GhosterSettings.showDebugger;
-            statusLabel.Visible = GhosterSettings.showStatus;
-        }
-
-        private void startGhostingButton_Click(object sender, EventArgs e)
+        private void startRemoteGhostingButton_Click(object sender, EventArgs e)
         {
             if (ipTextBox.Text.Contains("."))
             {
@@ -372,7 +331,7 @@ namespace CSGO_Ghoster
                 else
                 {
                     statusLabel.Text = "Attempting to connect to " + GhosterSettings.externalGhostIp + ":" + GhosterSettings.standardPort + "...";
-                    GhosterSettings.externalHttpUri = "http://"+ GhosterSettings.externalGhostIp + ":" + GhosterSettings.standardPort;
+                    GhosterSettings.externalHttpUri = "http://" + GhosterSettings.externalGhostIp + ":" + GhosterSettings.standardPort;
                 }
 
                 // Start Ghosting
@@ -383,12 +342,47 @@ namespace CSGO_Ghoster
                 // End of Local ghosting
                 DebugBox.Text = DebugBox.Text + "\n> Ghosting match stopped...";
                 statusLabel.Text = "Ghosting match stopped...";
-                startGhostingButton.Enabled = true;
+                startRemoteGhostingButton.Enabled = true;
             }
             else
             {
                 statusLabel.Text = "Oops! Unvalid IP Address!";
             }
+        }
+
+
+        private void Form1_Deactivate(object sender, EventArgs e)
+        {
+            FormBorderStyle = FormBorderStyle.None;
+
+            GhosterWindowInformationLabel.Visible = false;
+
+            ipTextBox.Visible = false;
+            startRemoteGhostingButton.Visible = false;
+            startGhostLocalButton.Visible = false;
+            replaceMapButton.Visible = false;
+            settingsButton.Visible = false;
+
+            DebugBox.Visible = false;
+            statusLabel.Visible = false;
+            
+            GhosterCore.PlaceOnTop();
+        }
+
+        private void Form1_Activated(object sender, EventArgs e)
+        {
+            FormBorderStyle = FormBorderStyle.Sizable;
+
+            GhosterWindowInformationLabel.Visible = false;
+
+            ipTextBox.Visible = true;
+            startRemoteGhostingButton.Visible = true;
+            startGhostLocalButton.Visible = true;
+            replaceMapButton.Visible = true;
+            settingsButton.Visible = true;
+
+            DebugBox.Visible = GhosterSettings.showDebugger;
+            statusLabel.Visible = GhosterSettings.showStatus;
         }
 
         private void Form1_ResizeEnd(object sender, EventArgs e)
